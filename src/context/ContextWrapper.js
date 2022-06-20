@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import GlobalContext from "./GlobalContext";
 import dayjs from "dayjs";
 
@@ -6,7 +6,7 @@ const savedEventReducer = (state, { type, payload }) => {
   switch (type) {
     case "push":
       const newState = [...state, payload];
-      console.log(newState);
+      // console.log(newState);
       return newState;
     case "update":
       return state.map((evt) => (evt.id === payload.id ? payload : evt));
@@ -22,6 +22,13 @@ const ContextWrapper = (props) => {
   const [showEventModal, setShowEventModal] = useState(false);
   const [daySelected, setDaySelected] = useState(dayjs());
   const [savedEvents, dispatchCalEvent] = useReducer(savedEventReducer, []);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+
+  useEffect(() => {
+    if (!showEventModal) {
+      setSelectedEvent(null);
+    }
+  }, [showEventModal]);
 
   return (
     <GlobalContext.Provider
@@ -34,6 +41,8 @@ const ContextWrapper = (props) => {
         setDaySelected,
         savedEvents,
         dispatchCalEvent,
+        selectedEvent,
+        setSelectedEvent,
       }}
     >
       {props.children}

@@ -3,9 +3,10 @@ import dayjs from "dayjs";
 import GlobalContext from "../context/GlobalContext";
 
 const Day = ({ day, rowIdx }) => {
-  const [dayEvents, setDayEvents] = useState([]);
-  const { setShowEventModal, setDaySelected, savedEvents } =
+  const { setShowEventModal, setDaySelected, savedEvents, setSelectedEvent } =
     useContext(GlobalContext);
+
+  const [dayEvents, setDayEvents] = useState([]);
 
   useEffect(() => {
     const events = savedEvents.filter(
@@ -40,6 +41,7 @@ const Day = ({ day, rowIdx }) => {
         {dayEvents.map((evt, idx) => (
           <div
             key={idx}
+            onClick={() => setSelectedEvent(evt)}
             className={`bg-${evt.label}-200 p-1 mr-3 text-gray-600 text-sm rounded mb-1 truncated`}
           >
             {evt.title}
